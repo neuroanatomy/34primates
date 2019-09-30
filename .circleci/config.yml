@@ -16,3 +16,9 @@ jobs:
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
             bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda
             echo 'export PATH="~/miniconda/bin:$PATH"' >> $BASH_ENV
+
+      - run:
+          name: run statistics and visualisation of the raw data
+          command: |
+            source activate
+            Rscript src/10.1_phylo-stats_raw.R
