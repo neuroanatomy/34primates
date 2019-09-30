@@ -4,6 +4,7 @@ version: 2.1
 # Run the welcome/run job in its own container
 jobs:
   build:
+    working_directory: ~/repo
     steps:
       - checkout
       - run:
