@@ -11,7 +11,7 @@
 require(corrplot)
 
 # Set working directory
-dir="/Users/katja/annex-bc-primates/data/derived/stats"
+dir="data/derived/stats"
 setwd(dir)
 
 # Load lookup table for matching phenotypes and Wilson&Reeder names
