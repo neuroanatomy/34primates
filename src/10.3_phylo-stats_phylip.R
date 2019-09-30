@@ -12,7 +12,7 @@ library(ape)
 library(phytools)
 
 # Set working directory
-dir="/Users/katja/annex-bc-primates/data/derived/stats"
+dir="data/derived/stats"
 setwd(dir)
 
 outputdir <- "3phylo-phylip"
