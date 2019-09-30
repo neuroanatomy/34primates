@@ -12,4 +12,11 @@ workflows:
   Welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - welcome/run
+      build:
+        steps:
+          - checkout
+          - run:
+            name: install R
+            command: |
+              sudo apt update
+              sudo apt-get install r-base
