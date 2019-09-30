@@ -18,6 +18,14 @@ jobs:
             echo 'export PATH="~/miniconda/bin:$PATH"' >> $BASH_ENV
 
       - run:
+          name: install conda dependencies
+          command: |
+            conda config --add channels r
+            conda config --add channels conda-forge
+            conda config --add channels defaults
+            conda install r-base r-plyr r-r.matlab
+
+      - run:
           name: run statistics and visualisation of the raw data
           command: |
             source activate
