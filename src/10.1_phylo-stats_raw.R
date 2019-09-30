@@ -4,7 +4,7 @@
 #
 
 # Install required packages
-install.packages("corrplot")
+install.packages("corrplot",repos = "http://cran.us.r-project.org")
 # and then enable corrplot in your 'Packages' tab if you use RStudio
 # We are using R Version 3.5, corrplot 0.84
 
