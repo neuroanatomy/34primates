@@ -24,6 +24,11 @@ jobs:
             conda config --add channels conda-forge
             conda config --add channels defaults
             conda install r-base r-plyr r-r.matlab
+      - run:
+          name: install packages, run statistics and visualisation of the raw data
+          command: |
+            source activate
+            Rscript src/10.1_phylo-stats_raw.R
 
       - run:
           name: run phylogenetic tree plot and independent contrast using APE
