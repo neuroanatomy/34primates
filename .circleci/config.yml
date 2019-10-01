@@ -30,9 +30,3 @@ jobs:
           command: |
             source activate
             Rscript src/10.2_phylo-stats_ape.R
-
-      - run:
-          name: run something else
-          command: |
-            source activate
-            Rscript src/10.3_phylo-stats_phylip.R
