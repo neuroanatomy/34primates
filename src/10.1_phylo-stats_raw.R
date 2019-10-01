@@ -3,11 +3,6 @@
 # Roberto Toro, Katja Heuer 2018
 #
 
-# Install required packages
-install.packages("ape",repos = "http://cran.us.r-project.org")
-install.packages("phytools",repos="https://cloud.r-project.org", quiet=TRUE)
-install.packages("corrplot",repos = "http://cran.us.r-project.org")
-
 # Notes
 # Enable corrplot in your 'Packages' tab if you use RStudio
 # We are using R Version 3.5, corrplot 0.84
