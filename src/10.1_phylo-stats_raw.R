@@ -4,8 +4,12 @@
 #
 
 # Install required packages
+install.packages("ape",repos = "http://cran.us.r-project.org")
+install.packages("phytools",repos = "http://cran.us.r-project.org")
 install.packages("corrplot",repos = "http://cran.us.r-project.org")
-# and then enable corrplot in your 'Packages' tab if you use RStudio
+
+# Notes
+# Enable corrplot in your 'Packages' tab if you use RStudio
 # We are using R Version 3.5, corrplot 0.84
 
 require(corrplot)
