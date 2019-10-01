@@ -4,7 +4,7 @@
 #
 
 # Install required packages
-install.packages("ape",repos = "http://cran.us.r-project.org")
+install.packages("ape") #,repos = "http://cran.us.r-project.org")
 install.packages("phytools") #,repos = "http://cran.us.r-project.org")
 install.packages("corrplot",repos = "http://cran.us.r-project.org")
 
