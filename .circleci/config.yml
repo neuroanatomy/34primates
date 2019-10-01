@@ -26,7 +26,13 @@ jobs:
             conda install r-base r-plyr r-r.matlab
 
       - run:
-          name: run statistics and visualisation of the raw data
+          name: run phylogenetic tree plot and independent contrast using APE
           command: |
             source activate
-            Rscript src/10.1_phylo-stats_raw.R
+            Rscript src/10.2_phylo-stats_ape.R
+
+      - run:
+          name: run something else
+          command: |
+            source activate
+            Rscript src/10.3_phylo-stats_phylip.R
