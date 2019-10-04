@@ -58,11 +58,12 @@ D <- lapply(phenolist,"[[","Delta")
 #  Phylip)
 #---------------------------------
 
-y <- list()
-for(i in 1:length(SA)) {
-  y[[names(SA[i])]]<-matrix(unlist(c(SA[i],V[i],G[i],L[i],N[i],W[i],D[i])),nrow=length(SA[i][[1]]))
+if (Sys.info()[["sysname"]]) {
+  y <- list()
+  for(i in 1:length(SA)) {
+    y[[names(SA[i])]]<-matrix(unlist(c(SA[i],V[i],G[i],L[i],N[i],W[i],D[i])),nrow=length(SA[i][[1]]))
+  }
+  sink("3phylo-phylip/3.1.varCompPhylip.txt")
+  varCompPhylip(y,tree, exec="/Applications/phylip-3.695/exe/contrast") # change to the appropriate path
+  sink()
 }
-sink("3phylo-phylip/3.1.varCompPhylip.txt")
-varCompPhylip(y,tree, exec="/Applications/phylip-3.695/exe/contrast")
-sink()
-
