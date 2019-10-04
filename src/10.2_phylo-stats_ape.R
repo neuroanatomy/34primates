@@ -16,7 +16,7 @@ getwd()
 
 # Create output directory
 outputdir <- "2phylo-ape"
-dir.create(file.path(dir, outputdir))
+dir.create(outputdir)
 
 # Load 10k tree, force ultrametric by extending branches
 tree <- force.ultrametric(read.nexus("../../external/10kTrees/WilsonAndReeder/1000/consensusTree_10kTrees_Primates_Version3.nex"), method="extend")
