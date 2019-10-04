@@ -58,3 +58,11 @@ jobs:
           command: |
             source activate
             Rscript src/10.4_phylo-stats_rphylopars.R
+
+      - run:
+          name: run fitting phylogenetic models using Rphylopars. Different models of phenotypic evolution are fitted to the data 100 times, and their AIC values are stored (smaller values indicate a better fit)
+
+          command: |
+            source activate
+            Rscript src/10.5_phylo-stats_rphylopars100.R
+            
