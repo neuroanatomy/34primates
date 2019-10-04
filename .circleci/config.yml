@@ -16,8 +16,9 @@ jobs:
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
             bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda
             echo 'export PATH="~/miniconda/bin:$PATH"' >> $BASH_ENV
-      - run install lapack
-        command: |
+      - run:
+          name: install lapack
+          command: |
             apt-get install libblas-dev liblapack-dev
 
       - run:
