@@ -7,4 +7,4 @@ library("phytools")
 library("corrplot")
 library("devtools")
 
-install_github("ericgoolsby/Rphylopars",dependencies = TRUE)
+install_github("r03ert0/Rphylopars",dependencies = TRUE)
