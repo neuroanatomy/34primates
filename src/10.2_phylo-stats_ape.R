@@ -9,8 +9,10 @@ library(phytools)
 library(corrplot)
 
 # Set working directory
+getwd()
 dir="data/derived/stats"
 setwd(dir)
+getwd()
 
 # Create output directory
 outputdir <- "2phylo-ape"
