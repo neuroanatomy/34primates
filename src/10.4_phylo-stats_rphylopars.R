@@ -5,7 +5,7 @@
 # We are using R Versions 3.5
 
 library(Rphylopars)
-require(phytools)
+library(phytools)
 
 # Set working directory
 dir="data/derived/stats"
@@ -13,7 +13,7 @@ setwd(dir)
 
 # Create output directory
 outputdir <- "4phylo-rphylopars"
-dir.create(file.path(dir, outputdir))
+dir.create(outputdir)
 
 source('../../../src/catn.R')
 
