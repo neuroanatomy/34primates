@@ -16,10 +16,6 @@ jobs:
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
             bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda
             echo 'export PATH="~/miniconda/bin:$PATH"' >> $BASH_ENV
-      - run:
-          name: install lapack
-          command: |
-            sudo apt-get install libblas-dev liblapack-dev
 
       - run:
           name: install conda dependencies
@@ -30,6 +26,8 @@ jobs:
             conda config --add channels conda-forge
             conda install r-base
             conda install r-phytools
+            conda install -c conda-forge lapack
+            conda install -c conda-forge blas
 
       - run:
           name: install packages
