@@ -19,7 +19,7 @@ jobs:
       - run:
           name: install lapack
           command: |
-            apt-get install libblas-dev liblapack-dev
+            sudo apt-get install libblas-dev liblapack-dev
 
       - run:
           name: install conda dependencies
