@@ -58,7 +58,7 @@ D <- lapply(phenolist,"[[","Delta")
 #  Phylip)
 #---------------------------------
 
-if (Sys.info()[["sysname"]]) {
+if (Sys.info()[["sysname"]] == "Darwin") {
   y <- list()
   for(i in 1:length(SA)) {
     y[[names(SA[i])]]<-matrix(unlist(c(SA[i],V[i],G[i],L[i],N[i],W[i],D[i])),nrow=length(SA[i][[1]]))
