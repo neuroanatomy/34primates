@@ -6,3 +6,5 @@ library("ape")
 library("phytools")
 library("corrplot")
 library("devtools")
+
+install_github("ericgoolsby/Rphylopars",dependencies = TRUE)
