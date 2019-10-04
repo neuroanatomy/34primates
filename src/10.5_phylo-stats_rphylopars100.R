@@ -11,12 +11,12 @@ library(future)
 library(listenv)
 
 # Set working directory
-dir="/Users/katja/annex-bc-primates/data/derived/stats"
+dir="data/derived/stats"
 setwd(dir)
 
 # Create output directory
 outputdir <- "5phylo-rphylopars100"
-dir.create(file.path(dir, outputdir))
+dir.create(outputdir)
 
 source('../../../src/catn.R')
 
