@@ -52,3 +52,9 @@ jobs:
           command: |
             source activate
             Rscript src/10.3_phylo-stats_phylip.R
+
+      - run:
+          name: run fit different models
+          command: |
+            source activate
+            Rscript src/10.4_phylo-stats_rphylopars.R
