@@ -92,7 +92,7 @@ if(isCircleCI) {
     niter=2
     for(iter in 1:niter) {
         print(iter)
-        fitMovels[[iter]]<-iterationStep(iter)
+        fitModels[[iter]]<-iterationStep(iter)
     }
 } else {
     # Fit in parallel
