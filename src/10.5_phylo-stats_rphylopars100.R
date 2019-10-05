@@ -21,12 +21,15 @@ dir.create(outputdir)
 source('../../../src/catn.R')
 
 # Load 10k tree block
+print("load tree block")
 treeblock <<- read.nexus("../../external/10kTrees/WilsonAndReeder/100/TreeBlock_10kTrees_Primates_Version3.nex")
 
 # Load lookup table for matching phenotypes and Wilson&Reeder names
+print("load species names")
 lut <- read.csv("../../../src/10kTrees_34PrimateSpecies.tsv", sep='\t')
 
 # Load neuroanatomical phenotypes and append Wilson&Reeder names
+print("load phenotypes")
 pheno <- read.csv("stats.csv", sep="\t")
 pheno <- merge(pheno,lut,by="SpecimenID")
 
@@ -34,6 +37,7 @@ pheno <- merge(pheno,lut,by="SpecimenID")
 options(width=as.integer(200))
 
 # Move measurements to logarithms (except AbsGI)
+print("log convert when appropriate")
 pheno$Surface.Area <- log10(pheno$Surface.Area)
 pheno$Volume <- log10(pheno$Volume)
 # pheno$AbsGI <- log10(pheno$AbsGI)
@@ -42,6 +46,7 @@ pheno$Folding.number <- log10(pheno$Folding.number)
 pheno$Delta[pheno$Delta<0] <- 0
 
 # Prepare an appropriate data frame: 1st column "specimen", following columns traits
+print("prepare dataframe")
 pheno2 <<- pheno[c("WilsonReeder.Name","Surface.Area","Volume","AbsGI","Folding.Length","Folding.number","Lambda","Delta")]
 colnames(pheno2)[1] <- "species"
 
@@ -51,12 +56,12 @@ colnames(pheno2)[1] <- "species"
 #------------------------------------
 # Fit evolutionary models, 100 times
 #------------------------------------
+print("fit evolutionary model on 100 trees")
 plan(multicore, workers=8)
-sink("5phylo-rphylopars100/100+.csv")
+sink("5phylo-rphylopars100/100+.csv", split=TRUE)
 catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
 fitModels <- listenv()
 for(iter in 1:100) {
-    print(iter)
     fitModels[[iter]] %<-% {
         tree <- force.ultrametric( treeblock[[iter]], method="extend")
 
@@ -88,6 +93,7 @@ sink()
 #------------------------------------
 # Get median values
 #------------------------------------
+print("get median values")
 sink("5phylo-rphylopars100/100++.csv") 
 results <- read.csv("5phylo-rphylopars100/100+.csv", sep=' ')
 catn("Model", "AIC")
@@ -99,5 +105,4 @@ catn("OU_full", median(results$OU_full))
 catn("EB", median(results$EB))
 catn("OU_alpha", median(results$OU_alpha))
 catn("EB_rate", median(results$EB_rate))
-
 sink()
