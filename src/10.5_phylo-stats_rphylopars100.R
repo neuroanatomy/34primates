@@ -58,11 +58,10 @@ colnames(pheno2)[1] <- "species"
 #------------------------------------
 print("fit evolutionary model on 100 trees")
 plan(multicore, workers=8)
-sink("5phylo-rphylopars100/100+.csv", split=TRUE)
-catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
 fitModels <- listenv()
 for(iter in 1:100) {
     fitModels[[iter]] %<-% {
+        print("iteration")
         tree <- force.ultrametric( treeblock[[iter]], method="extend")
 
         p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
@@ -85,6 +84,9 @@ for(iter in 1:100) {
     }
 }
 fitModels <- as.list(fitModels)
+
+sink("5phylo-rphylopars100/100+.csv")
+catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
 for(iter in 1:100) {
     catn(fitModels[[iter]])
 }
