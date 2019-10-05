@@ -58,10 +58,8 @@ colnames(pheno2)[1] <- "species"
 #------------------------------------
 print("fit evolutionary model on 100 trees")
 
-# Fit sequentially
-fitModels <- listenv()
-for(iter in 1:100) {
-    print(iter)
+# One iteration step
+iterationStep <-function(iter) {
     tree <- force.ultrametric( treeblock[[iter]], method="extend")
 
     p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
@@ -71,7 +69,7 @@ for(iter in 1:100) {
     p_OU_full <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=TRUE), error=function(e) 0)
     p_EB <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="EB"), error=function(e) 0)
 
-    fitModels[[iter]] <- c(iter,
+    return(c(iter,
         tryCatch(AIC(p_star), error=function(e) 0),
         tryCatch(AIC(p_BM), error=function(e) 0),
         tryCatch(AIC(p_OU), error=function(e) 0),
@@ -80,45 +78,39 @@ for(iter in 1:100) {
         tryCatch(AIC(p_EB), error=function(e) 0),
         tryCatch(p_OU$model$alpha, error=function(e) 0),
         tryCatch(p_EB$model$rate, error=function(e) 0)
-    )
+    ))
 }
+
+# Run the iterations
+# If running on CircleCI, do only 2 iterations, sequentially.
+# Otherwise, run in parallel and do 100 iterations
+isCircleCI=(Sys.getenv("CI")!="")
+niter=100
+fitModels <- listenv()
+if(isCircleCI) {
+    # Fit sequentially
+    niter=2
+    for(iter in 1:niter) {
+        print(iter)
+        fitMovels[[iter]]<-iterationStep(iter)
+    }
+} else {
+    # Fit in parallel
+    plan(multicore, workers=8)
+    for(iter in 1:niter) {
+        fitModels[[iter]] %<-% { iterationStep(iter) }
+    }
+    fitModels <- as.list(fitModels)
+}
+                         
 fitModels <- as.list(fitModels)
-
-# Fit in parallel
-# plan(multicore, workers=8)
-# fitModels <- listenv()
-# for(iter in 1:100) {
-#     fitModels[[iter]] %<-% {
-#         print("iteration")
-#         tree <- force.ultrametric( treeblock[[iter]], method="extend")
-
-#         p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
-#         p_BM <- tryCatch(phylopars(trait_data=pheno2, tree=tree), error=function(e) 0)
-#         p_OU <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="OU"), error=function(e) 0)
-#         p_OU_diag <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=FALSE), error=function(e) 0)
-#         p_OU_full <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=TRUE), error=function(e) 0)
-#         p_EB <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="EB"), error=function(e) 0)
-
-#         return(c(iter,
-#             tryCatch(AIC(p_star), error=function(e) 0),
-#             tryCatch(AIC(p_BM), error=function(e) 0),
-#             tryCatch(AIC(p_OU), error=function(e) 0),
-#             tryCatch(AIC(p_OU_diag), error=function(e) 0),
-#             tryCatch(AIC(p_OU_full), error=function(e) 0),
-#             tryCatch(AIC(p_EB), error=function(e) 0),
-#             tryCatch(p_OU$model$alpha, error=function(e) 0),
-#             tryCatch(p_EB$model$rate, error=function(e) 0)
-#         ))
-#     }
-# }
-# fitModels <- as.list(fitModels)
-
 sink("5phylo-rphylopars100/100+.csv")
 catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
-for(iter in 1:100) {
-    catn(fitModels[[iter]])
+for(iter in 1:2) {
+catn(fitModels[[iter]])
 }
 sink()
+
 
 #------------------------------------
 # Get median values
