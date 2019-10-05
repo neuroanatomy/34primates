@@ -57,33 +57,61 @@ colnames(pheno2)[1] <- "species"
 # Fit evolutionary models, 100 times
 #------------------------------------
 print("fit evolutionary model on 100 trees")
-plan(multicore, workers=8)
+
+# Fit sequentially
 fitModels <- listenv()
 for(iter in 1:100) {
-    fitModels[[iter]] %<-% {
-        print("iteration")
-        tree <- force.ultrametric( treeblock[[iter]], method="extend")
+    print(iter)
+    tree <- force.ultrametric( treeblock[[iter]], method="extend")
 
-        p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
-        p_BM <- tryCatch(phylopars(trait_data=pheno2, tree=tree), error=function(e) 0)
-        p_OU <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="OU"), error=function(e) 0)
-        p_OU_diag <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=FALSE), error=function(e) 0)
-        p_OU_full <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=TRUE), error=function(e) 0)
-        p_EB <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="EB"), error=function(e) 0)
+    p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
+    p_BM <- tryCatch(phylopars(trait_data=pheno2, tree=tree), error=function(e) 0)
+    p_OU <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="OU"), error=function(e) 0)
+    p_OU_diag <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=FALSE), error=function(e) 0)
+    p_OU_full <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=TRUE), error=function(e) 0)
+    p_EB <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="EB"), error=function(e) 0)
 
-        return(c(iter,
-            tryCatch(AIC(p_star), error=function(e) 0),
-            tryCatch(AIC(p_BM), error=function(e) 0),
-            tryCatch(AIC(p_OU), error=function(e) 0),
-            tryCatch(AIC(p_OU_diag), error=function(e) 0),
-            tryCatch(AIC(p_OU_full), error=function(e) 0),
-            tryCatch(AIC(p_EB), error=function(e) 0),
-            tryCatch(p_OU$model$alpha, error=function(e) 0),
-            tryCatch(p_EB$model$rate, error=function(e) 0)
-        ))
-    }
+    fitModels[[iter]] <- c(iter,
+        tryCatch(AIC(p_star), error=function(e) 0),
+        tryCatch(AIC(p_BM), error=function(e) 0),
+        tryCatch(AIC(p_OU), error=function(e) 0),
+        tryCatch(AIC(p_OU_diag), error=function(e) 0),
+        tryCatch(AIC(p_OU_full), error=function(e) 0),
+        tryCatch(AIC(p_EB), error=function(e) 0),
+        tryCatch(p_OU$model$alpha, error=function(e) 0),
+        tryCatch(p_EB$model$rate, error=function(e) 0)
+    )
 }
 fitModels <- as.list(fitModels)
+
+# Fit in parallel
+# plan(multicore, workers=8)
+# fitModels <- listenv()
+# for(iter in 1:100) {
+#     fitModels[[iter]] %<-% {
+#         print("iteration")
+#         tree <- force.ultrametric( treeblock[[iter]], method="extend")
+
+#         p_star <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="star"), error=function(e) 0)
+#         p_BM <- tryCatch(phylopars(trait_data=pheno2, tree=tree), error=function(e) 0)
+#         p_OU <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="OU"), error=function(e) 0)
+#         p_OU_diag <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=FALSE), error=function(e) 0)
+#         p_OU_full <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="mvOU", full_alpha=TRUE), error=function(e) 0)
+#         p_EB <- tryCatch(phylopars(trait_data=pheno2, tree=tree, model="EB"), error=function(e) 0)
+
+#         return(c(iter,
+#             tryCatch(AIC(p_star), error=function(e) 0),
+#             tryCatch(AIC(p_BM), error=function(e) 0),
+#             tryCatch(AIC(p_OU), error=function(e) 0),
+#             tryCatch(AIC(p_OU_diag), error=function(e) 0),
+#             tryCatch(AIC(p_OU_full), error=function(e) 0),
+#             tryCatch(AIC(p_EB), error=function(e) 0),
+#             tryCatch(p_OU$model$alpha, error=function(e) 0),
+#             tryCatch(p_EB$model$rate, error=function(e) 0)
+#         ))
+#     }
+# }
+# fitModels <- as.list(fitModels)
 
 sink("5phylo-rphylopars100/100+.csv")
 catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
