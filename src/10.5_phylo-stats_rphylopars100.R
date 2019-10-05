@@ -56,6 +56,7 @@ sink("5phylo-rphylopars100/100+.csv")
 catn("Tree", "Star", "BM", "OU", "OU_diag", "OU_full", "EB", "OU_alpha", "EB_rate", sep=" ")
 fitModels <- listenv()
 for(iter in 1:100) {
+    print(iter)
     fitModels[[iter]] %<-% {
         tree <- force.ultrametric( treeblock[[iter]], method="extend")
 
